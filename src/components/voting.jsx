@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types'
 
 // Voting Card Component
-export default function VotingCard({ setCastVote, categoryName, categoryID }) {
+export default function VotingCard({ setCastVote, categoryName, categoryID,handleVoteStatus}) {
 
     const [userInput, setUserInput] = useState('');
     const [mentorsList, setMentorList] = useState([])
@@ -16,6 +16,8 @@ export default function VotingCard({ setCastVote, categoryName, categoryID }) {
     function handleUserSelect(mentorID) {
         setCastVote(true)
         voteMentor(mentorID, categoryID)
+        handleVoteStatus(categoryID)
+
     }
     //  run retrieveMentors function when there is change in userINput
     useEffect(() => {
@@ -39,8 +41,8 @@ export default function VotingCard({ setCastVote, categoryName, categoryID }) {
             <div className="suggestion-container border-x border-b rounded-b-lg  border-[#d0a351] w-full h-[300px] p-4 relative bottom-2 overflow-auto ">
                 <ul className="suggestion-list">
                     {
-                        mentorsList && mentorsList.map((mentor) => {
-                            return <li key={mentor.id} className="hover:cursor-pointer" onClick={() => handleUserSelect(mentor.id)}>
+                        mentorsList?.map((mentor) => {
+                            return <li key={mentor.id} className="hover:cursor-pointer pb-2" onClick={() => handleUserSelect(mentor.id)}>
                                 {mentor.name}
                             </li>
                         })
@@ -50,25 +52,25 @@ export default function VotingCard({ setCastVote, categoryName, categoryID }) {
         </div>
     </div>
 }
-
-export function VotingSuccessModal({ setCastVote, setOpenForm, handleVoteStatus, id }) {
+//
+export function VotingSuccessModal({ setCastVote, setOpenForm}) {
     return <div className="h-full w-full absolute top-0 flex justify-center items-center z-10 backdrop-blur-sm">
         <div className="success-modal min-w-[290px] w-[350px] md:w-[350px] lg:w-[400px] text-white relative mx-auto z-100 bg-black border border-[#d0a351] rounded-2xl flex flex-col">
             <p className="mb-10 mt-12 text-pretty text-center ">Voting Successful!!</p>
-            <CancelButton setCastVote={setCastVote} setOpenForm={setOpenForm} handleVoteStatus={handleVoteStatus} id={id} />
+            <CancelButton setCastVote={setCastVote} setOpenForm={setOpenForm}/>
         </div>
     </div>
 }
+//
 VotingCard.propTypes = {
     setCastVote: PropTypes.func,
     categoryName: PropTypes.string,
     categoryID: PropTypes.number,
+    handleVoteStatus: PropTypes.func,
 }
 VotingSuccessModal.propTypes = {
     setCastVote: PropTypes.func,
-    handleVoteStatus: PropTypes.func,
     setOpenForm: PropTypes.func,
-    id: PropTypes.number
 }
 //function to filter mentors based on user input 
 function getInput(list, input) {
@@ -88,7 +90,6 @@ function getInput(list, input) {
 async function fetchMentors(input) {
     try {
         const response = await fetch("https://rate-your-mentor.fly.dev/api/mentors");
-        console.log(response.status)
         if (response.ok) {
             const mentors = await response.json();
             return getInput(mentors, input);
@@ -104,7 +105,6 @@ async function voteMentor(mentorID, categoryID) {
         'category_id': categoryID,
         'mentor_id': mentorID
     }
-    console.log(voteData)
     try {
         const response = await fetch('https://rate-your-mentor.fly.dev/api/votes', {
             method: "POST",
@@ -117,7 +117,6 @@ async function voteMentor(mentorID, categoryID) {
             throw new Error(`Response Status: ${response.status}`);
 
         }
-        console.log(response)
 
     }
     catch (error) {

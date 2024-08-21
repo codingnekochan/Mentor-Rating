@@ -1,21 +1,18 @@
 import Forward from '../assets/arrow-forward.svg'
 import Back from '../assets/arrow-back.svg'
 import PropTypes from 'prop-types'
-
+// 
 function OpenFormButton({ setOpenForm,hasVoted,id}) {
 
     const voteIsTrue = !!hasVoted[id]
-
     function openVoteForm() {
         setOpenForm(true)
-        console.log(voteIsTrue)
     }
-    console.log(voteIsTrue)
     return <button id='cast-vote' className="border border-[#d0a351] px-4 py-1 rounded-xl shadow-xl mt-2" onClick={openVoteForm} disabled={voteIsTrue}>
        {voteIsTrue? 'Voted' : 'Cast your vote'}
     </button>
 }
-
+//
 function ForwardButton({ categoryID, setCategoryID, categoryLength }) {
     function onForward() {
         setCategoryID(categoryID => categoryID + 1)
@@ -25,8 +22,9 @@ function ForwardButton({ categoryID, setCategoryID, categoryLength }) {
         <img src={Forward} alt="foward button" />
     </button>
 }
-
+// 
 function BackButton({ categoryID, setCategoryID }) {
+
     function onBackward() {
         if (categoryID > 1) {
             setCategoryID(categoryID => categoryID - 1)
@@ -37,13 +35,12 @@ function BackButton({ categoryID, setCategoryID }) {
         <img src={Back} alt="back button" />
     </button>
 }
-
-function CancelButton({ handleVoteStatus, setOpenForm, setCastVote,id}) {
+// 
+function CancelButton({setOpenForm, setCastVote}) {
 
     function goToCategory() {
         setOpenForm(false)
         setCastVote(false)
-        handleVoteStatus(id)
     }
     return <button id='vote' className="border border-[#d0a351] px-6 py-1 rounded-xl shadow-xl mx-auto mb-6" onClick={goToCategory} >
         <span>Back to categories</span>

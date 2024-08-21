@@ -1,7 +1,7 @@
 import Category from "./components/category"
 import Header from "./components/header"
 import Main from "./components/mainsection"
-import VotingCard, { VotingSuccessModal } from "./components/modal"
+import VotingCard, { VotingSuccessModal } from "./components/voting"
 import { useEffect, useState } from "react"
 
 const saveVotes = localStorage.getItem('hasVoted')
@@ -19,11 +19,15 @@ function App() {
       const response = await fetch(
         "https://rate-your-mentor.fly.dev/api/categories"
       );
+      if (!response.ok) {
+        throw new Error(`Response Status: ${response.status}`);
+
+      }
       const categories = await response.json();
       return setCategoryLength(categories.length)
     } catch (error) {
-      console.log(error);
-      console.log("not found");
+      console.error(error);
+      console.error("not found");
     }
   }
   useEffect(() => {
@@ -33,12 +37,12 @@ function App() {
   useEffect(() => {
     fetchCategories()
   }, [])
+ 
   const isNotEmpty = (category) => {
     return Object.keys(category).length !== 0 && category.constructor === Object;
   }
 
   function handleVoteStatus(id) {
-    console.log(id)
     setHasVoted((prev) =>
     ({
       ...prev,
@@ -51,28 +55,31 @@ function App() {
       <Header />
       <Main>
         {
-          isNotEmpty &&
-          (!openForm ?
-            (
-              <Category
-                id={category.id}
-                openForm={openForm}
-                setOpenForm={setOpenForm}
-                hasVoted={hasVoted}
-                category={category}
-                categoryLength = {categoryLength}
-                setCategory={setCategory}
-                totalVotes = {category.total_votes}
-                mentorPerCategory = {category.total_votes_by_mentor}
-              />
-            )
-            :
-            (
-              <VotingCard
-                setCastVote={setCastVote}
-                categoryName={category.name}
-                categoryID={category.id}
-              />
+          (
+            isNotEmpty &&
+            (!openForm ?
+              (
+                <Category
+                  id={category.id}
+                  openForm={openForm}
+                  setOpenForm={setOpenForm}
+                  hasVoted={hasVoted}
+                  category={category}
+                  categoryLength={categoryLength}
+                  setCategory={setCategory}
+                  totalVotes={category.total_votes}
+                  mentorPerCategory={category.total_votes_by_mentor}
+                />
+              )
+              :
+              (
+                <VotingCard
+                  setCastVote={setCastVote}
+                  categoryName={category.name}
+                  categoryID={category.id}
+                  handleVoteStatus={handleVoteStatus}
+                />
+              )
             )
           )
         }
@@ -83,8 +90,6 @@ function App() {
               id={category.id}
               setOpenForm={setOpenForm}
               setCastVote={setCastVote}
-              handleVoteStatus={handleVoteStatus}
-
             />
           )
         }
