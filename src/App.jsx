@@ -2,23 +2,92 @@ import Category from "./components/category"
 import Header from "./components/header"
 import Main from "./components/mainsection"
 import VotingCard, { VotingSuccessModal } from "./components/modal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+
+const saveVotes = localStorage.getItem('hasVoted')
 
 function App() {
-
-  const [castVote, setCastVote]= useState(false)
-  const [vote,setVote]= useState(false)
+  const [openForm, setOpenForm] = useState(false)
+  const [castVote, setCastVote] = useState(false)
   const [category, setCategory] = useState({})
-  const [hasVoted, setHasVoted] = useState(false)
+  const [categoryLength, setCategoryLength] = useState(null)
+  const [hasVoted, setHasVoted] = useState(
+    saveVotes ? JSON.parse(saveVotes) : {}
+  )
+  async function fetchCategories() {
+    try {
+      const response = await fetch(
+        "https://rate-your-mentor.fly.dev/api/categories"
+      );
+      const categories = await response.json();
+      return setCategoryLength(categories.length)
+    } catch (error) {
+      console.log(error);
+      console.log("not found");
+    }
+  }
+  useEffect(() => {
+    localStorage.setItem('hasVoted', JSON.stringify(hasVoted))
+  }, [hasVoted])
 
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+  const isNotEmpty = (category) => {
+    return Object.keys(category).length !== 0 && category.constructor === Object;
+  }
+
+  function handleVoteStatus(id) {
+    console.log(id)
+    setHasVoted((prev) =>
+    ({
+      ...prev,
+      [id]: true,
+    })
+    )
+  }
   return (
     <>
-      <Header/>
+      <Header />
       <Main>
         {
-          !castVote ? <Category castVote={castVote} setCastVote= {setCastVote} hasVoted = {hasVoted} category={category} setCategory={setCategory}/> : <VotingCard vote={vote} setVote={setVote} categoryName= {category.name} categoryID={category.id}/>
+          isNotEmpty &&
+          (!openForm ?
+            (
+              <Category
+                id={category.id}
+                openForm={openForm}
+                setOpenForm={setOpenForm}
+                hasVoted={hasVoted}
+                category={category}
+                categoryLength = {categoryLength}
+                setCategory={setCategory}
+                totalVotes = {category.total_votes}
+                mentorPerCategory = {category.total_votes_by_mentor}
+              />
+            )
+            :
+            (
+              <VotingCard
+                setCastVote={setCastVote}
+                categoryName={category.name}
+                categoryID={category.id}
+              />
+            )
+          )
         }
-        {vote && <VotingSuccessModal setCastVote={setCastVote} setVote={setVote} setHasVoted ={setHasVoted} />}
+        {
+          castVote &&
+          (
+            <VotingSuccessModal
+              id={category.id}
+              setOpenForm={setOpenForm}
+              setCastVote={setCastVote}
+              handleVoteStatus={handleVoteStatus}
+
+            />
+          )
+        }
       </Main>
     </>
   )

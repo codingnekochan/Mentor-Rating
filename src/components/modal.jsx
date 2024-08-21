@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types'
 
 // Voting Card Component
-export default function VotingCard({setVote, categoryName, categoryID }) {
+export default function VotingCard({ setCastVote, categoryName, categoryID }) {
 
     const [userInput, setUserInput] = useState('');
     const [mentorsList, setMentorList] = useState([])
@@ -13,9 +13,9 @@ export default function VotingCard({setVote, categoryName, categoryID }) {
     function handleUserInput(e) {
         setUserInput(e.target.value)
     }
-    function handleUserSelect(mentorID){
-        setVote(true)
-        voteMentor(mentorID,categoryID)
+    function handleUserSelect(mentorID) {
+        setCastVote(true)
+        voteMentor(mentorID, categoryID)
     }
     //  run retrieveMentors function when there is change in userINput
     useEffect(() => {
@@ -29,18 +29,18 @@ export default function VotingCard({setVote, categoryName, categoryID }) {
         return () => clearTimeout(debounceFunction)
     }, [userInput])
 
-    return <div className="voting-container min-w-[290px] w-[350px] h-[400px] md:w-[350px] md:h-[400px] lg:w-[400px] lg:h-[400px] m-2 px-4 pb-4 pt-5 flex flex-col text-white">
+    return <div className="voting-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto p-4 flex flex-col justify-around items-center text-white">
         <CategoryName categoryName={categoryName} />
         <div className="voting-card m-auto w-[70%]">
             <label htmlFor="mentor-search" className="relative">
                 <input type="text" id='mentor-search' className="bg-[#ffffff0d] shadow-inner border border-[#d0a351] outline-none w-full rounded-lg px-4 py-1 placeholder:text-[#ffffff59]" placeholder="Search for mentor" value={userInput} onChange={handleUserInput} />
                 <img src={search} className="absolute top-0 right-2" alt="search icon" />
             </label>
-            <div className="suggestion-container border-x border-b rounded-b-lg  border-[#d0a351] w-full h-[250px] p-4 relative bottom-2 overflow-auto ">
+            <div className="suggestion-container border-x border-b rounded-b-lg  border-[#d0a351] w-full h-[300px] p-4 relative bottom-2 overflow-auto ">
                 <ul className="suggestion-list">
                     {
                         mentorsList && mentorsList.map((mentor) => {
-                            return <li key={mentor.id} className="hover:cursor-pointer" onClick={()=>handleUserSelect(mentor.id)}>
+                            return <li key={mentor.id} className="hover:cursor-pointer" onClick={() => handleUserSelect(mentor.id)}>
                                 {mentor.name}
                             </li>
                         })
@@ -51,23 +51,24 @@ export default function VotingCard({setVote, categoryName, categoryID }) {
     </div>
 }
 
-export function VotingSuccessModal({ setVote, setCastVote, setHasVoted }) {
+export function VotingSuccessModal({ setCastVote, setOpenForm, handleVoteStatus, id }) {
     return <div className="h-full w-full absolute top-0 flex justify-center items-center z-10 backdrop-blur-sm">
         <div className="success-modal min-w-[290px] w-[350px] md:w-[350px] lg:w-[400px] text-white relative mx-auto z-100 bg-black border border-[#d0a351] rounded-2xl flex flex-col">
             <p className="mb-10 mt-12 text-pretty text-center ">Voting Successful!!</p>
-            <CancelButton setVote={setVote} setCastVote={setCastVote}  setHasVoted={setHasVoted}/>
+            <CancelButton setCastVote={setCastVote} setOpenForm={setOpenForm} handleVoteStatus={handleVoteStatus} id={id} />
         </div>
     </div>
 }
 VotingCard.propTypes = {
-    setVote: PropTypes.func,
+    setCastVote: PropTypes.func,
     categoryName: PropTypes.string,
-    categoryID :PropTypes.number,
+    categoryID: PropTypes.number,
 }
 VotingSuccessModal.propTypes = {
-    setVote : PropTypes.func,
-    setHasVoted :PropTypes.func,
-    setCastVote: PropTypes.func
+    setCastVote: PropTypes.func,
+    handleVoteStatus: PropTypes.func,
+    setOpenForm: PropTypes.func,
+    id: PropTypes.number
 }
 //function to filter mentors based on user input 
 function getInput(list, input) {
@@ -99,7 +100,6 @@ async function fetchMentors(input) {
 }
 
 async function voteMentor(mentorID, categoryID) {
-
     let voteData = {
         'category_id': categoryID,
         'mentor_id': mentorID
