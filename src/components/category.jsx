@@ -48,7 +48,7 @@ function CategoryCard({ setOpenForm, hasVoted, category, setCategory, id, catego
             (<Loader/>):
             (<div className='w-[80%] h-full flex flex-col justify-between items-center'>
                 <CategoryName categoryID={categoryID} setCategoryID={setCategoryID} categoryName={category.name} categoryLength={categoryLength} />
-                <h1 className='mt-2 py-2 px-4 font-bold rounded-md  shadow-[#d0a4511f] relative top-1 shadow-inner'>Top 5 Mentors</h1>
+                <h1 className='mt-2 py-2 px-4 font-medium rounded-md  shadow-[#d0a4511f] relative top-1 shadow-inner'>Top 5 Mentors</h1>
                 <div className="h-[300px] w-full mentor-poll flex gap-3 items-end mb-4 shadow-inner  shadow-[#d0a4511f] p-2 md:p-4 rounded-md text-center">
                     {
                         // checks that category list is not empty and renders mentors in categeory or cta message
@@ -87,7 +87,7 @@ function MentorProfile({ height, mentorName, mentorVote, mentorAvater }) {
 function CategoryName({ categoryID, setCategoryID, categoryName, categoryLength }) {
     return <div className="category-title w-[260px] border border-[#d0a351] p-2 px-4 flex items-center justify-between mb-2 rounded-3xl shadow shadow-[#d0a451a5] mx-auto">
         <BackButton categoryID={categoryID} setCategoryID={setCategoryID} />
-        <p className='font-bold'>{categoryName}</p>
+        <p className='font-medium'>{categoryName}</p>
         <ForwardButton categoryID={categoryID} setCategoryID={setCategoryID} categoryLength={categoryLength} />
     </div>
 }

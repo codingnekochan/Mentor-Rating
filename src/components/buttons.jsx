@@ -8,7 +8,7 @@ function OpenFormButton({ setOpenForm, hasVoted, id }) {
     function openVoteForm() {
         setOpenForm(true)
     }
-    return <button id='cast-vote' className="border border-[#d0a351] px-4 py-1 rounded-xl shadow-xl mt-4 hover:scale-105" onClick={openVoteForm} disabled={voteIsTrue}>
+    return <button id='cast-vote' className="font-medium border border-[#d0a351] px-4 py-1 rounded-xl shadow-xl mt-4 hover:scale-105 disabled:border-gray-300" onClick={openVoteForm} disabled={voteIsTrue}>
         {voteIsTrue ? 'Voted' : 'Cast your vote'}
     </button>
 }
