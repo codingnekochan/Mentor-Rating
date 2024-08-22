@@ -2,21 +2,21 @@ import Forward from '../assets/arrow-forward.svg'
 import Back from '../assets/arrow-back.svg'
 import PropTypes from 'prop-types'
 // 
-function OpenFormButton({ setOpenForm,hasVoted,id}) {
+function OpenFormButton({ setOpenForm, hasVoted, id }) {
 
     const voteIsTrue = !!hasVoted[id]
     function openVoteForm() {
         setOpenForm(true)
     }
-    return <button id='cast-vote' className="border border-[#d0a351] px-4 py-1 rounded-xl shadow-xl mt-2" onClick={openVoteForm} disabled={voteIsTrue}>
-       {voteIsTrue? 'Voted' : 'Cast your vote'}
+    return <button id='cast-vote' className="border border-[#d0a351] px-4 py-1 rounded-xl shadow-xl mt-4 hover:scale-105" onClick={openVoteForm} disabled={voteIsTrue}>
+        {voteIsTrue ? 'Voted' : 'Cast your vote'}
     </button>
 }
 //
 function ForwardButton({ categoryID, setCategoryID, categoryLength }) {
     function onForward() {
         setCategoryID(categoryID => categoryID + 1)
-        localStorage.setItem('categoryID', categoryID + 1)
+        localStorage.setItem('categoryID', parseInt(categoryID + 1))
     }
     return <button className="forward-button" disabled={categoryID === categoryLength} onClick={onForward}>
         <img src={Forward} alt="foward button" />
@@ -28,7 +28,7 @@ function BackButton({ categoryID, setCategoryID }) {
     function onBackward() {
         if (categoryID > 1) {
             setCategoryID(categoryID => categoryID - 1)
-            localStorage.setItem('categoryID', categoryID - 1)
+            localStorage.setItem('categoryID', parseInt(categoryID - 1))
         }
     }
     return <button className="back-button" disabled={categoryID === 1} onClick={onBackward}>
@@ -36,7 +36,7 @@ function BackButton({ categoryID, setCategoryID }) {
     </button>
 }
 // 
-function CancelButton({setOpenForm, setCastVote}) {
+function CancelButton({ setOpenForm, setCastVote }) {
 
     function goToCategory() {
         setOpenForm(false)
@@ -52,12 +52,12 @@ export { OpenFormButton, ForwardButton, BackButton, CancelButton }
 OpenFormButton.propTypes = {
     setOpenForm: PropTypes.func,
     hasVoted: PropTypes.object,
-    id :PropTypes.number
+    id: PropTypes.number
 }
 ForwardButton.propTypes = {
     categoryID: PropTypes.number,
     setCategoryID: PropTypes.func,
-    categoryLength : PropTypes.number
+    categoryLength: PropTypes.number
 }
 BackButton.propTypes = {
     categoryID: PropTypes.number,

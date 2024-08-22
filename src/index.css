@@ -8,7 +8,7 @@
   background: rgb(10, 10, 10);
 }
 .overflow-auto {
-  scrollbar-width: thin;
+  scrollbar-width:thin;
   scrollbar-color: black;
 }
 .category-container,

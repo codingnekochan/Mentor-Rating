@@ -31,14 +31,14 @@ export default function VotingCard({ setCastVote, categoryName, categoryID,handl
         return () => clearTimeout(debounceFunction)
     }, [userInput])
 
-    return <div className="voting-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto p-4 flex flex-col justify-around items-center text-white">
+    return <div className="voting-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white">
         <CategoryName categoryName={categoryName} />
         <div className="voting-card m-auto w-[70%]">
             <label htmlFor="mentor-search" className="relative">
-                <input type="text" id='mentor-search' className="bg-[#ffffff0d] shadow-inner border border-[#d0a351] outline-none w-full rounded-lg px-4 py-1 placeholder:text-[#ffffff59]" placeholder="Search for mentor" value={userInput} onChange={handleUserInput} />
+                <input type="text" id='mentor-search' className="h-[35px] bg-[#ffffff0d] border border-[#d0a351] outline-none w-full rounded-lg px-4 py-1 placeholder:text-[#ffffff59] z-100" placeholder="Search for mentor" value={userInput} onChange={handleUserInput} />
                 <img src={search} className="absolute top-0 right-2" alt="search icon" />
             </label>
-            <div className="suggestion-container border-x border-b rounded-b-lg  border-[#d0a351] w-full h-[300px] p-4 relative bottom-2 overflow-auto ">
+            <div className="suggestion-container border-x border-b rounded-b-lg  border-[#d0a351] w-full h-[300px] p-4 relative bottom-2 overflow-auto -z-100">
                 <ul className="suggestion-list">
                     {
                         mentorsList?.map((mentor) => {

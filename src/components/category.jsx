@@ -10,7 +10,7 @@ localStorage.setItem('categoryID', ID)
 // 
 export default function Category({ setOpenForm, hasVoted, category, setCategory, id, categoryLength, totalVotes, mentorPerCategory }) {
 
-    return <div className="category-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto p-4 flex flex-col justify-around items-center text-white">
+    return <div className="category-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white">
         <CategoryCard setOpenForm={setOpenForm} hasVoted={hasVoted} category={category} setCategory={setCategory} id={id} categoryLength={categoryLength} totalVotes={totalVotes} mentorPerCategory={mentorPerCategory} />
     </div>
 }
@@ -46,18 +46,19 @@ function CategoryCard({ setOpenForm, hasVoted, category, setCategory, id, catego
     return <>
         {isLoading ?
             (<Loader/>):
-            (<div className='w-[80%] flex flex-col justify-center items-center'>
+            (<div className='w-[80%] h-full flex flex-col justify-between items-center'>
                 <CategoryName categoryID={categoryID} setCategoryID={setCategoryID} categoryName={category.name} categoryLength={categoryLength} />
+                <h1 className='mt-2 py-2 px-4 font-bold rounded-md  shadow-[#d0a4511f] relative top-1 shadow-inner'>Top 5 Mentors</h1>
                 <div className="h-[300px] w-full mentor-poll flex gap-3 items-end mb-4 shadow-inner  shadow-[#d0a4511f] p-2 md:p-4 rounded-md text-center">
                     {
-                        // checks that category list is not empty and renders mentors in categeory or
+                        // checks that category list is not empty and renders mentors in categeory or cta message
                         numberofMentorsPerCategory > 0 ? (mentorPerCategory?.map((mentor) => {
                             let mentorVotePerCategory = ((mentor.total_votes / totalVotes) * 160)
                             console.log(mentorVotePerCategory)
                             return <MentorProfile key={mentor.mentor.id} height={`${mentorVotePerCategory}px`} mentorName={mentor.mentor.name} mentorVote={mentor.total_votes} mentorAvater={mentor.mentor.avater} />
                         }))
                             : (
-                                <p className='w-full border border-white self-center text-center'>{`Vote your favourite mentor`}</p>
+                                <p className='w-full self-center text-center'>{`Vote your favourite mentor`}</p>
                             )
                     }
                 </div>
@@ -86,7 +87,7 @@ function MentorProfile({ height, mentorName, mentorVote, mentorAvater }) {
 function CategoryName({ categoryID, setCategoryID, categoryName, categoryLength }) {
     return <div className="category-title w-[260px] border border-[#d0a351] p-2 px-4 flex items-center justify-between mb-2 rounded-3xl shadow shadow-[#d0a451a5] mx-auto">
         <BackButton categoryID={categoryID} setCategoryID={setCategoryID} />
-        <p>{categoryName}</p>
+        <p className='font-bold'>{categoryName}</p>
         <ForwardButton categoryID={categoryID} setCategoryID={setCategoryID} categoryLength={categoryLength} />
     </div>
 }
