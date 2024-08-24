@@ -4,65 +4,67 @@ import { BackButton, OpenFormButton, ForwardButton } from './buttons'
 import { useState } from 'react'
 import Loader from './loader'
 import PropTypes from 'prop-types'
-
-let ID = 1;
-localStorage.setItem('categoryID', ID)
+//
+let index = 0;
+localStorage.setItem('categoryID', index)
 // 
-export default function Category({ setOpenForm, hasVoted, category, setCategory, id, categoryLength, totalVotes, mentorPerCategory }) {
+export default function Category({ setOpenForm, hasVoted, categoryItem, setCategoryItem, categoryList, id, categoryLength, totalVotes, mentorPerCategory,isLoading,setIsLoading }) {
 
     return <div className="category-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white">
-        <CategoryCard setOpenForm={setOpenForm} hasVoted={hasVoted} category={category} setCategory={setCategory} id={id} categoryLength={categoryLength} totalVotes={totalVotes} mentorPerCategory={mentorPerCategory} />
+        <CategoryCard setOpenForm={setOpenForm} hasVoted={hasVoted} categoryItem={categoryItem} setCategoryItem={setCategoryItem} id={id} categoryList={categoryList} categoryLength={categoryLength} totalVotes={totalVotes} mentorPerCategory={mentorPerCategory} isLoading={isLoading} setIsLoading = {setIsLoading} />
     </div>
 }
 // 
-function CategoryCard({ setOpenForm, hasVoted, category, setCategory, id, categoryLength, totalVotes, mentorPerCategory }) {
-
-    const [categoryID, setCategoryID] = useState(ID)
-    const [isLoading, setIsLoading] = useState(false)
-
-    let savedCategoryID = localStorage.getItem('categoryID')
-    let numberofMentorsPerCategory = mentorPerCategory?.length
-
-    async function getCategories(savedCategoryID) {
+function CategoryCard({ setOpenForm, hasVoted, categoryItem, setCategoryItem, categoryLength, categoryList, id, totalVotes, mentorPerCategory,isLoading,setIsLoading }) {
+    //
+    const [categoryIndex, setCategoryIndex] = useState(index)
+    const numberofMentorsPerCategory = mentorPerCategory?.length
+    let savedCategoryIndex = localStorage.getItem('categoryID');
+    let savedCategoryID = categoryList[savedCategoryIndex]?.id
+    const fetchCategoryByIdEndpoint = `https://rate-your-mentor.fly.dev/api/categories/${savedCategoryID}`
+    console.log(savedCategoryID)
+    //
+    async function getCategories() {
         setIsLoading(true)
         try {
-            const response = await fetch(`https://rate-your-mentor.fly.dev/api/categories/${savedCategoryID}`)
+            const response = await fetch(fetchCategoryByIdEndpoint)
             if (!response.ok) {
-                throw new Error(`Response Status: ${response.status}`);
+                throw new Error(`Response Status: ${response.status} && ${response.statusText}`);
             }
             const fetchedCategory = await response.json()
-            return setCategory(fetchedCategory)
+            console.log(fetchedCategory)
+            return setCategoryItem(fetchedCategory)
         } catch (error) {
             console.error(error)
-        }finally{
+        } finally {
             setIsLoading(false)
         }
     }
-// fetches categories every time user clicks forward or back button and changes categoryID
+    // fetches categories every time user clicks forward or back button and changes categoryIndex
     useEffect(() => {
-        getCategories(savedCategoryID)
+        getCategories()
     },[savedCategoryID])
-//
+    //
     return <>
         {isLoading ?
-            (<Loader/>):
+            (<Loader />) :
             (<div className='w-[80%] h-full flex flex-col justify-between items-center'>
-                <CategoryName categoryID={categoryID} setCategoryID={setCategoryID} categoryName={category.name} categoryLength={categoryLength} />
+                <CategoryName categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} categoryName={categoryItem?.name} categoryLength={categoryLength} />
                 <h1 className='mt-2 py-2 px-4 font-medium rounded-md  shadow-[#d0a4511f] relative top-1 shadow-inner'>Top 5 Mentors</h1>
                 <div className="h-[300px] w-full mentor-poll flex gap-3 items-end mb-4 shadow-inner  shadow-[#d0a4511f] p-2 md:p-4 rounded-md text-center">
                     {
                         // checks that category list is not empty and renders mentors in categeory or cta message
                         numberofMentorsPerCategory > 0 ? (mentorPerCategory?.map((mentor) => {
-                            let mentorVotePerCategory = ((mentor.total_votes / totalVotes) * 160)
+                            let mentorVotePerCategory = ((mentor?.total_votes / totalVotes) * 160)
                             console.log(mentorVotePerCategory)
-                            return <MentorProfile key={mentor.mentor.id} height={`${mentorVotePerCategory}px`} mentorName={mentor.mentor.name} mentorVote={mentor.total_votes} mentorAvater={mentor.mentor.avater} />
+                            return <MentorProfile key={mentor?.mentor.id} height={`${mentorVotePerCategory}px`} mentorName={mentor?.mentor.name} mentorVote={mentor?.total_votes} mentorAvater={mentor?.mentor.avater} />
                         }))
                             : (
                                 <p className='w-full self-center text-center'>{`Vote your favourite mentor`}</p>
                             )
                     }
                 </div>
-                <OpenFormButton setOpenForm={setOpenForm} hasVoted={hasVoted} id={id} categoryID={categoryID} />
+                <OpenFormButton setOpenForm={setOpenForm} hasVoted={hasVoted} id={id} />
 
             </div>)
         }
@@ -84,11 +86,11 @@ function MentorProfile({ height, mentorName, mentorVote, mentorAvater }) {
         </div>)
 }
 //
-function CategoryName({ categoryID, setCategoryID, categoryName, categoryLength }) {
+function CategoryName({ categoryIndex, setCategoryIndex, categoryName, categoryLength }) {
     return <div className="category-title w-[260px] border border-[#d0a351] p-2 px-4 flex items-center justify-between mb-2 rounded-3xl shadow shadow-[#d0a451a5] mx-auto">
-        <BackButton categoryID={categoryID} setCategoryID={setCategoryID} />
+        <BackButton categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} />
         <p className='font-medium'>{categoryName}</p>
-        <ForwardButton categoryID={categoryID} setCategoryID={setCategoryID} categoryLength={categoryLength} />
+        <ForwardButton categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} categoryLength={categoryLength} />
     </div>
 }
 //
@@ -97,22 +99,28 @@ export { CategoryName, CategoryCard }
 Category.propTypes = {
     setOpenForm: PropTypes.func,
     hasVoted: PropTypes.object,
-    category: PropTypes.object,
-    setCategory: PropTypes.func,
+    categoryItem: PropTypes.object,
+    setCategoryItem: PropTypes.func,
+    categoryList: PropTypes.array,
     id: PropTypes.number,
     categoryLength: PropTypes.number,
     totalVotes: PropTypes.number,
     mentorPerCategory: PropTypes.array,
+    isLoading :PropTypes.bool,
+    setIsLoading :PropTypes.func,
 }
 CategoryCard.propTypes = {
     id: PropTypes.number,
     setOpenForm: PropTypes.func,
     hasVoted: PropTypes.object,
-    category: PropTypes.object,
-    setCategory: PropTypes.func,
+    categoryItem: PropTypes.object,
+    setCategoryItem: PropTypes.func,
+    categoryList: PropTypes.array,
     categoryLength: PropTypes.number,
     totalVotes: PropTypes.number,
     mentorPerCategory: PropTypes.array,
+    isLoading: PropTypes.bool,
+    setIsLoading: PropTypes.func,
 }
 MentorProfile.propTypes = {
     height: PropTypes.string,
@@ -121,8 +129,8 @@ MentorProfile.propTypes = {
     mentorVote: PropTypes.number,
 }
 CategoryName.propTypes = {
-    categoryID: PropTypes.number,
-    setCategoryID: PropTypes.func,
+    categoryIndex: PropTypes.number,
+    setCategoryIndex: PropTypes.func,
     categoryName: PropTypes.string,
     categoryLength: PropTypes.number,
 }

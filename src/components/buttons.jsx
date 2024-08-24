@@ -3,7 +3,6 @@ import Back from '../assets/arrow-back.svg'
 import PropTypes from 'prop-types'
 // 
 function OpenFormButton({ setOpenForm, hasVoted, id }) {
-
     const voteIsTrue = !!hasVoted[id]
     function openVoteForm() {
         setOpenForm(true)
@@ -13,25 +12,24 @@ function OpenFormButton({ setOpenForm, hasVoted, id }) {
     </button>
 }
 //
-function ForwardButton({ categoryID, setCategoryID, categoryLength }) {
+function ForwardButton({ categoryIndex, setCategoryIndex, categoryLength }) {
     function onForward() {
-        setCategoryID(categoryID => categoryID + 1)
-        localStorage.setItem('categoryID', parseInt(categoryID + 1))
+        setCategoryIndex(categoryIndex => categoryIndex + 1)
+        localStorage.setItem('categoryID', parseInt(categoryIndex + 1))
     }
-    return <button className="forward-button" disabled={categoryID === categoryLength} onClick={onForward}>
+    return <button className="forward-button" disabled={categoryIndex === (categoryLength-1)} onClick={onForward}>
         <img src={Forward} alt="foward button" />
     </button>
 }
 // 
-function BackButton({ categoryID, setCategoryID }) {
-
+function BackButton({ categoryIndex, setCategoryIndex }) {
     function onBackward() {
-        if (categoryID > 1) {
-            setCategoryID(categoryID => categoryID - 1)
-            localStorage.setItem('categoryID', parseInt(categoryID - 1))
+        if (categoryIndex > 0) {
+            setCategoryIndex( categoryIndex => categoryIndex - 1)
+            localStorage.setItem('categoryID', parseInt(categoryIndex - 1))
         }
     }
-    return <button className="back-button" disabled={categoryID === 1} onClick={onBackward}>
+    return <button className="back-button" disabled={ categoryIndex === 0} onClick={onBackward}>
         <img src={Back} alt="back button" />
     </button>
 }
@@ -55,13 +53,13 @@ OpenFormButton.propTypes = {
     id: PropTypes.number
 }
 ForwardButton.propTypes = {
-    categoryID: PropTypes.number,
-    setCategoryID: PropTypes.func,
+    categoryIndex: PropTypes.number,
+    setCategoryIndex: PropTypes.func,
     categoryLength: PropTypes.number
 }
 BackButton.propTypes = {
-    categoryID: PropTypes.number,
-    setCategoryID: PropTypes.func
+    categoryIndex: PropTypes.number,
+    setCategoryIndex: PropTypes.func
 }
 CancelButton.propTypes = {
     handleVoteStatus: PropTypes.func,
