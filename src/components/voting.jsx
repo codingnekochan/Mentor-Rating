@@ -66,11 +66,11 @@ export default function VotingCard({ setCastVote, categoryName, categoryID, hand
                         isLoading ?
                             <Loader /> :
                             (validationMessage ? <p className="text-red-600 m-auto">{validationMessage}</p> :
-                                (mentorsList.length === 0 ? <p>No Mentor Found</p> : mentorsList?.map((mentor) => {
+                                (mentorsList.length !== 0 ? mentorsList?.map((mentor) => {
                                     return <li key={mentor.id} className="hover:cursor-pointer pb-2 w-full" onClick={() => handleUserSelect(mentor.id)}>
                                         {mentor.name}
                                     </li>
-                                }))
+                                }) : <p>No Mentor Found</p>)
                             )
                     }
                 </ul>
@@ -118,7 +118,7 @@ function getInput(list, input) {
 async function fetchMentors(input) {
     try {
         const response = await fetch(fetchMentorsEndpoint);
-        if (response.ok) {
+        if (response.ok && response.status === 200) {
             const mentors = await response.json();
             return getInput(mentors, input);
         }
