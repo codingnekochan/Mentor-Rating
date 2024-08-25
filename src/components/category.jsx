@@ -10,7 +10,7 @@ localStorage.setItem('categoryID', index)
 // 
 export default function Category({ setOpenForm, hasVoted, categoryItem, setCategoryItem, categoryList, id, categoryLength, totalVotes, mentorPerCategory, isLoading, setIsLoading }) {
 
-    return <div className="category-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white">
+    return <div className="category-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white max-sm:scale-[0.82]">
         <CategoryCard setOpenForm={setOpenForm} hasVoted={hasVoted} categoryItem={categoryItem} setCategoryItem={setCategoryItem} id={id} categoryList={categoryList} categoryLength={categoryLength} totalVotes={totalVotes} mentorPerCategory={mentorPerCategory} isLoading={isLoading} setIsLoading={setIsLoading} />
     </div>
 }
@@ -58,7 +58,7 @@ function CategoryCard({ setOpenForm, hasVoted, categoryItem, setCategoryItem, ca
             (
                 isLoading ?
                     (<Loader />) :
-                    ( isNotEmpty(categoryItem) === true && <div className='w-[80%] h-full flex flex-col justify-between items-center'>
+                    (isNotEmpty(categoryItem) === true && <div className='w-[80%] h-full flex flex-col justify-between items-center'>
                         <CategoryName categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} categoryName={categoryItem?.name} categoryLength={categoryLength} />
                         <h1 className='mt-2 py-2 px-4 font-medium rounded-md  shadow-[#d0a4511f] relative top-1 shadow-inner'>Top 5 Mentors</h1>
                         <div className="h-[300px] w-full mentor-poll flex gap-3 items-end mb-4 shadow-inner  shadow-[#d0a4511f] p-2 md:p-4 rounded-md text-center">
@@ -98,7 +98,7 @@ function MentorProfile({ height, mentorName, mentorVote, mentorAvater }) {
 }
 //
 function CategoryName({ categoryIndex, setCategoryIndex, categoryName, categoryLength }) {
-    return <div className="category-title w-[260px] border border-[#d0a351] p-2 px-4 flex items-center justify-between mb-2 rounded-3xl shadow shadow-[#d0a451a5] mx-auto">
+    return <div className="category-title min-w-[100px] max-w-[260px] border border-[#d0a351] p-2 px-4 flex items-center justify-between mb-2 rounded-3xl shadow shadow-[#d0a451a5] mx-auto max-sm:scale-[0.9]">
         <BackButton categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} />
         <p className='font-medium'>{categoryName}</p>
         <ForwardButton categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} categoryLength={categoryLength} />

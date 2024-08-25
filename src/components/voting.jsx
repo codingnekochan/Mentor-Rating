@@ -52,7 +52,7 @@ export default function VotingCard({ setCastVote, categoryName, categoryID, hand
         return () => clearTimeout(debounceFunction)
     }, [userInput])
     console.log(mentorsList)
-    return <div className="voting-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white">
+    return <div className="voting-container min-w-[290px] w-[350px] h-[500px] md:w-[350px] lg:w-[400px] m-auto py-8 px-4 flex flex-col justify-center items-center text-white max-sm:scale-[0.82]">
         <CategoryName categoryName={categoryName} />
         <div className="voting-card m-auto w-[70%]">
             <label htmlFor="mentor-search" className="relative">
