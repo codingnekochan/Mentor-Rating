@@ -7,7 +7,6 @@ import Loader from "./loader";
 //API Endpoints;
 const fetchMentorsEndpoint = `https://rate-your-mentor.fly.dev/api/mentors`
 const voteMentorEndpoint = `https://rate-your-mentor.fly.dev/api/votes`
-
 // Voting Card Component
 export default function VotingCard({ setCastVote, categoryName, categoryID, handleVoteStatus, isLoading, setIsLoading }) {
     //

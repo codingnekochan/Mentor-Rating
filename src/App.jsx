@@ -1,6 +1,5 @@
 import Category from "./components/category"
 import Header from "./components/header"
-import Loader from "./components/loader"
 import Main from "./components/mainsection"
 import VotingCard, { VotingSuccessModal } from "./components/voting"
 import { useEffect, useState } from "react"
