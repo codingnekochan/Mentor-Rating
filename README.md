@@ -1,8 +1,39 @@
-# React + Vite
+# Mentor Ratings
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Mentor Ratings** is a web application where users can rate and review mentors based on different categories. The app provides an intuitive interface for users to browse mentors, view ratings, and provide feedback.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is a collaborative effort where the front end was built by @codingnekcohan using **React**, **Vite**, and **Tailwind CSS**, while the deployment was handled with **Fly.io**.
+
+## Features
+
+- View ratings for top five mentors.
+- Responsive design for a smooth experience across devices.
+- Search and vote mentors based on categories.
+- Navigation between categories using next/previous buttons.
+
+
+## Technologies Used
+
+### FRONTEND
+- **React**: For building the user interface and managing state.
+- **Vite**: For fast development and optimized builds.
+- **Tailwind CSS**: For styling the application with utility-first CSS.
+- **Fly.io**: For hosting and deploying the application.
+
+  
+### BACKEND
+  Details about the backend maybe found [here](https://github.com/codelikesuraj/rate-your-mentor)
+  
+
+### Deployment
+
+The project is hosted on **Fly.io**. You can access the live version [Mentor Ratings](https://rate-your-mentor-fe.fly.dev/).
+
+
+## License
+
+This project is licensed under the MIT License.
+
+
