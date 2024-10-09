@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-This project is a collaborative effort where the front end was built by @codingnekcohan using **React**, **Vite**, and **Tailwind CSS**, while the deployment was handled with **Fly.io**.
+This project is a collaborative effort where the front end was built by me using **React**, **Vite**, and **Tailwind CSS**, while the deployment was handled with **Fly.io**.
 
 ## Features
 
