@@ -56,7 +56,7 @@ function CategoryCard({ setOpenForm, hasVoted, categoryItem, setCategoryItem, ca
     return <>
         {
             (
-                isLoading ?
+                (isLoading || isNotEmpty(categoryItem) === false) ?
                     (<Loader />) :
                     (isNotEmpty(categoryItem) === true && <div className='w-[80%] h-full flex flex-col justify-between items-center'>
                         <CategoryName categoryIndex={categoryIndex} setCategoryIndex={setCategoryIndex} categoryName={categoryItem?.name} categoryLength={categoryLength} />
